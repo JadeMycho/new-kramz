@@ -1,0 +1,116 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gym members</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<main>
+<header>
+  <div class="brand">
+    <img class="brand-logo" src="kramz-logo.png" alt="Kramz Fitness Hub logo">
+    <div class="brand-copy">
+      <p class="eyebrow">KRAMZ FITNESS HUB</p>
+      <h1>Gym members</h1>
+      <p class="brand-subtitle">Memberships &amp; renewals in one place.</p>
+    </div>
+  </div>
+  <div class="date-tools">
+    <div><label for="asof">Show status on</label><input type="date" id="asof"></div>
+    <button id="today">Today</button>
+    <button id="revenue">Revenue</button>
+  </div>
+</header>
+
+<div class="tiles" id="tiles"></div>
+
+<div class="bar">
+  <input id="q" type="search" placeholder="Search name, phone or member ID" aria-label="Search members">
+  <button id="scan">Scan QR</button>
+  <button class="primary" id="add">Add member</button>
+</div>
+
+<div class="wrap">
+<table>
+  <thead><tr><th>Member</th><th>Phone</th><th>Plan</th><th>Valid through</th><th>Status</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<div class="empty" id="empty" hidden></div>
+</div>
+
+<footer>
+  <button id="export">Download backup</button>
+  <button id="importBtn">Restore backup</button>
+  <input type="file" id="importFile" accept=".json,.txt,application/json,text/plain" hidden>
+</footer>
+</main>
+
+<dialog id="addDlg">
+  <h2>Add member</h2>
+  <div class="field"><label for="n">Full name</label><input id="n" autocomplete="off"></div>
+  <div class="field"><label for="p">Phone</label><input id="p" inputmode="tel" autocomplete="off"></div>
+  <div class="field"><label for="pl">Purchase</label><select id="pl"><option value="session">Single session · ₱50</option><option value="15">15 days · ₱250</option><option value="30">1 month · ₱500</option><option value="promo">1 month + free jersey promo · ₱650</option></select></div>
+  <div class="field"><label for="st">Membership start date</label><input type="date" id="st"></div>
+  <div class="field"><label><input type="checkbox" id="paid" checked style="width:auto"> Payment received</label></div>
+  <div class="row"><button class="primary" id="saveNew">Save member</button><button id="cancelNew">Cancel</button></div>
+</dialog>
+
+<dialog id="viewDlg"></dialog>
+
+<dialog id="revenueDlg" aria-labelledby="revenueTitle">
+  <div class="revenue-heading">
+    <div><p class="eyebrow">KRAMZ FITNESS HUB</p><h2 id="revenueTitle">Revenue</h2></div>
+    <button id="closeRevenue" type="button">Close</button>
+  </div>
+  <section id="revenueAuth">
+    <p id="revenueAuthMessage" class="revenue-note"></p>
+    <div class="field"><label for="adminPin">Admin PIN</label><input id="adminPin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="12"></div>
+    <div class="field" id="confirmPinField" hidden><label for="confirmPin">Confirm PIN</label><input id="confirmPin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="12"></div>
+    <p id="revenueAuthError" class="revenue-error" role="alert" hidden></p>
+    <button class="primary" id="adminLogin">Continue</button>
+    <p class="revenue-security-note">This browser-only PIN is a basic privacy gate, not secure authentication. Revenue data is stored in this browser and is not included in member backups.</p>
+  </section>
+  <section id="revenueReport" hidden>
+    <div class="revenue-filters"><label for="revenueRange">Sales period</label><select id="revenueRange"><option value="day">Today</option><option value="week">This week</option><option value="month">This month</option><option value="year">This year</option></select><button id="adminLogout">Lock</button></div>
+    <div class="revenue-metrics">
+      <article class="revenue-metric"><span>Total revenue</span><strong id="revenueTotal">₱0</strong></article>
+      <article class="revenue-metric"><span>Transactions</span><strong id="revenueCount">0</strong></article>
+      <article class="revenue-metric"><span>Average sale</span><strong id="revenueAverage">₱0</strong></article>
+    </div>
+    <div class="sales-table-wrap"><table class="sales-table"><thead><tr><th>Date</th><th>Member</th><th>Purchase</th><th>Amount</th></tr></thead><tbody id="salesRows"></tbody></table><p id="salesEmpty" class="empty" hidden>No sales recorded for this period.</p></div>
+  </section>
+</dialog>
+
+<dialog id="scanDlg" aria-labelledby="scanTitle">
+  <div class="scan-heading">
+    <div>
+      <p class="eyebrow">MEMBER CHECK-IN</p>
+      <h2 id="scanTitle">Scan member QR</h2>
+    </div>
+    <button id="closeScan" type="button">Close</button>
+  </div>
+  <p id="scanStatus" class="scan-status" aria-live="polite">Allow camera access to scan a member's QR code.</p>
+  <div class="camera-select">
+    <label for="cameraSelect">Camera</label>
+    <select id="cameraSelect" disabled>
+      <option value="">Choose a camera</option>
+    </select>
+  </div>
+  <div class="camera-frame">
+    <video id="scanVideo" autoplay muted playsinline></video>
+    <span class="scan-target" aria-hidden="true"></span>
+  </div>
+  <p class="scan-hint">Position the member QR inside the frame. Camera scanning requires HTTPS or localhost.</p>
+</dialog>
+
+<script src="data.js" defer></script>
+<script src="qr.js" defer></script>
+<script src="ui.js" defer></script>
+<script src="jsqr.js" defer></script>
+<script src="app.js" defer></script>
+</body>
+</html>
